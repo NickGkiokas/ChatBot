@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatBot Assistant</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        #chatbot-container {
+            width: 300px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #messages {
+            margin-bottom: 20px;
+        }
+        #input-container {
+            display: flex;
+            align-items: center;
+        }
+        #input-container input {
+            flex-grow: 1;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        #input-container button {
+            margin-left: 5px;
+            padding: 5px 10px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #input-container button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <!-- EmailJS SDK -->
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script>
+        // Initialize EmailJS
+        (function() {
+            emailjs.init('uQgAQ5KMxF6bii6qX'); // Replace with your EmailJS Public Key
+        })();
+    </script>
+</head>
+<body>
+
+<div id="chatbot-container">
+    <div id="messages">
+        <p>Hello, I'm ChatBot assistant, how can I help?</p>
+        <p>Send 0 to 10 to see the corresponding response:</p>
+        <ul>
+            <li>Send 0 to ...</li>
+            <li>Send 1 to ...</li>
+            <li>Send 2 to ...</li>
+            <li>Send 3 to ...</li>
+            <li>Send 4 to ...</li>
+            <li>Send 5 to ...</li>
+            <li>Send 6 to ...</li>
+            <li>Send 7 to ...</li>
+            <li>Send 8 to ...</li>
+            <li>Send 9 to ...</li>
+            <li>Send 10 to ...</li>
+        </ul>
+    </div>
+    <div id="input-container">
+        <input type="number" id="user-input" placeholder="Enter a number (0-10)">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+    function sendMessage() {
+        const userInput = document.getElementById('user-input').value;
+        const messagesDiv = document.getElementById('messages');
+
+        // Check if input is empty
+        if (userInput === '') {
+            const errorMessage = document.createElement('p');
+            errorMessage.textContent = "SELECT NUMBER FIRST";
+            messagesDiv.appendChild(errorMessage);
+        } 
+        // Check if the input is a valid number between 0 and 10
+        else if (userInput >= 0 && userInput <= 10) {
+            const response = `You selected: ${userInput}`;
+            const userMessage = document.createElement('p');
+            userMessage.textContent = response;
+            messagesDiv.appendChild(userMessage);
+
+            // Send email using EmailJS if certain numbers are selected
+            if (userInput == 1 || userInput == 2) {
+                sendEmail(userInput);
+            }
+        } 
+        // Input is out of range
+        else {
+            const errorMessage = document.createElement('p');
+            errorMessage.textContent = "Please enter a number between 0 and 10.";
+            messagesDiv.appendChild(errorMessage);
+        }
+
+        // Clear the input field
+        document.getElementById('user-input').value = '';
+    }
+
+    function sendEmail(selectedNumber) {
+        emailjs.send('service_jpmquu9', 'template_080rqn9', {
+            number: selectedNumber, // Use the placeholder from the EmailJS template
+            email_to: 'gkiokas.nick@gmail.com' // Replace with the recipient email address
+        })
+        .then((response) => {
+            console.log('Email sent successfully!', response.status, response.text);
+        }, (error) => {
+            console.error('Failed to send email.', error);
+        });
+    }
+</script>
+
+</body>
+</html>
